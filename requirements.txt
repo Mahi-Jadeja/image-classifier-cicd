@@ -1,0 +1,7 @@
+dvc[s3]
+flask
+scikit-learn
+numpy
+Pillow
+pyyaml
+requests

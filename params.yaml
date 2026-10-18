@@ -1,0 +1,16 @@
+data:
+  dataset_url: "https://storage.googleapis.com/download.tensorflow.org/example_images/flower_photos.tgz"
+  raw_dir: "data/raw"
+  classes: ["daisy", "roses", "dandelion"]
+  max_images_per_class: 80
+
+processing:
+  image_size: 64
+  processed_dir: "data/processed"
+  validation_split: 0.2
+
+train:
+  n_estimators: 100
+  max_depth: 10
+  random_state: 42
+  model_path: "data/model/model.pkl"

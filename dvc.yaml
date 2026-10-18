@@ -1,0 +1,32 @@
+stages:
+  data_collection:
+    cmd: python src/data_collection.py
+    deps:
+      - src/data_collection.py
+    params:
+      - data
+    outs:
+      - data/raw
+
+  data_processing:
+    cmd: python src/data_processing.py
+    deps:
+      - src/data_processing.py
+      - data/raw
+    params:
+      - processing
+    outs:
+      - data/processed
+
+  train:
+    cmd: python src/train.py
+    deps:
+      - src/train.py
+      - data/processed
+    params:
+      - train
+    outs:
+      - data/model/model.pkl
+    metrics:
+      - data/metrics.json:
+          cache: false

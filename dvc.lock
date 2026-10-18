@@ -1,0 +1,78 @@
+schema: '2.0'
+stages:
+  data_collection:
+    cmd: python src/data_collection.py
+    deps:
+    - path: src/data_collection.py
+      hash: md5
+      md5: 60a7ac50fc73ba9e59ba4c431fcd6659
+      size: 1199
+    params:
+      params.yaml:
+        data:
+          dataset_url: 
+            https://storage.googleapis.com/download.tensorflow.org/example_images/flower_photos.tgz
+          raw_dir: data/raw
+          classes:
+          - daisy
+          - roses
+          - dandelion
+          max_images_per_class: 80
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: 5fbc272311ed8f3443a630d05869f090.dir
+      size: 13393208
+      nfiles: 240
+  data_processing:
+    cmd: python src/data_processing.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 5fbc272311ed8f3443a630d05869f090.dir
+      size: 13393208
+      nfiles: 240
+    - path: src/data_processing.py
+      hash: md5
+      md5: 9f8dc214b1f842581c4e6ff0250e7ca1
+      size: 1552
+    params:
+      params.yaml:
+        processing:
+          image_size: 64
+          processed_dir: data/processed
+          validation_split: 0.2
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 9eb6892af5ff0e649fd0e9f61ea35212.dir
+      size: 2951552
+      nfiles: 4
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: 9eb6892af5ff0e649fd0e9f61ea35212.dir
+      size: 2951552
+      nfiles: 4
+    - path: src/train.py
+      hash: md5
+      md5: 1f47acd1e3c1eb4e62d2c0850a858020
+      size: 1301
+    params:
+      params.yaml:
+        train:
+          n_estimators: 100
+          max_depth: 10
+          random_state: 42
+          model_path: data/model/model.pkl
+    outs:
+    - path: data/metrics.json
+      hash: md5
+      md5: b2e11771cb12ef36832230a0e6cf9810
+      size: 32
+    - path: data/model/model.pkl
+      hash: md5
+      md5: 220c0b1dd335b259d68bfaff444dde97
+      size: 477553
